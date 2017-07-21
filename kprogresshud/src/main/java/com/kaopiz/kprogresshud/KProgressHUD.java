@@ -23,6 +23,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.Gravity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -31,6 +32,14 @@ import android.widget.FrameLayout;
 import android.widget.TextView;
 
 public class KProgressHUD {
+    public interface OnDismissListener{
+        void dismiss();
+    }
+    private OnDismissListener onDismissListener;
+
+    public void setOnDismissListener(OnDismissListener onDismissListener) {
+        this.onDismissListener = onDismissListener;
+    }
 
     public enum Style {
         SPIN_INDETERMINATE, PIE_DETERMINATE, ANNULAR_DETERMINATE, BAR_DETERMINATE
@@ -51,6 +60,8 @@ public class KProgressHUD {
     private int mGraceTimeMs;
     private Handler mGraceTimer;
     private boolean mFinished;
+
+
 
     public KProgressHUD(Context context) {
         mContext = context;
@@ -348,6 +359,21 @@ public class KProgressHUD {
             setCanceledOnTouchOutside(false);
 
             initViews();
+        }
+
+        @Override
+        public boolean onKeyDown(int keyCode, KeyEvent event) {
+            if (keyCode == KeyEvent.KEYCODE_BACK) {
+                dismiss();
+                return true;
+            }
+            return super.onKeyDown(keyCode, event);
+        }
+
+        @Override
+        public void dismiss() {
+            super.dismiss();
+            onDismissListener.dismiss();
         }
 
         private void initViews() {

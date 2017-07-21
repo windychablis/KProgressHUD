@@ -26,6 +26,7 @@ import android.graphics.drawable.AnimationDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -69,6 +70,8 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
         Button customColor = (Button) findViewById(R.id.custom_color_animate);
         customColor.setOnClickListener(this);
+
+
     }
 
     private KProgressHUD hud;
@@ -145,7 +148,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                 scheduleDismiss();
                 break;
         }
-
+        hud.setOnDismissListener(new KProgressHUD.OnDismissListener() {
+            @Override
+            public void dismiss() {
+                Log.d("MainActivity", "关闭了hud，可以做操作了");
+            }
+        });
         hud.show();
     }
 
